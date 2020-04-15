@@ -1,10 +1,10 @@
-FROM node:lts
+FROM nginx
 
-WORKDIR /app/website
+# 删除 Nginx 的默认配置
+RUN rm /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000 35729
-COPY ./docs /app/docs
-COPY ./website /app/website
-RUN yarn install
+# 添加自定义 Nginx 配置
+COPY config/nginx.conf /etc/nginx/conf.d/
 
-CMD ["yarn", "start"]
+# 将前端静态文件拷贝到容器的 /www 目录下
+COPY website/build/chao /www
